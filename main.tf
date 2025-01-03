@@ -1,31 +1,24 @@
-# Copyright (c) HashiCorp, Inc.
-# SPDX-License-Identifier: MPL-2.0
-
 provider "aws" {
-  region = var.region
+  region = "us-east-1"  # Replace with your desired region
 }
 
-data "aws_ami" "ubuntu" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["099720109477"] # Canonical
-}
-
-resource "aws_instance" "ubuntu" {
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = var.instance_type
+# EC2 Instance
+resource "aws_instance" "example" {
+  ami           = "ami-12345678"  # Replace with a valid AMI ID for your region
+  instance_type = "t2.micro"
 
   tags = {
-    Name = var.instance_name
+    Name = "Provisioned by Terraform"
+  }
+}
+
+# S3 Bucket
+resource "aws_s3_bucket" "example" {
+  bucket = "my-unique-s3-bucket-name"  # Replace with a globally unique name
+  acl    = "private"
+
+  tags = {
+    Name        = "MyS3Bucket"
+    Environment = "Development"
   }
 }
